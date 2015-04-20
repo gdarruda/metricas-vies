@@ -39,11 +39,15 @@ class BancoMySQL():
 
         return cursor_perfil
 
-    def conta_noticias(self, id_perfil):
+    def conta_noticias(self, id_perfil, corpus):
 
         count_noticia = self.conexao.cursor()
 
-        query_perfil = ('select count(*) from noticias where id_perfil = %s and ind_corpus = \'S\'')
+        query_perfil = 'select count(*) from noticias where id_perfil = %s'
+
+        if corpus:
+            query_perfil = query_perfil + ' and ind_corpus = \'S\''
+
         dados_perfil = (id_perfil,)
 
         count_noticia.execute(query_perfil, dados_perfil)

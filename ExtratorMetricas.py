@@ -1,7 +1,7 @@
 from nltk.tokenize import RegexpTokenizer
 import numpy as np
 from scipy.spatial.distance import pdist, euclidean
-from sklearn.preprocessing import normalize
+from sklearn.preprocessing import normalize, scale
 
 class ExtratorMetricas():
 
@@ -36,13 +36,22 @@ class ExtratorMetricas():
                 elif polaridade == 'NG':
                     negativo+=1
 
-        media_palavras = float(total_palavras)/float(total_referencias)
-        media_referencias = float(total_referencias)/self.bd.conta_noticias(id_perfil)
+        if total_referencias == 0:
+            media_palavras = 0
+        else:
+            media_palavras = float(total_palavras)/float(total_referencias)
 
-        proporcao_positivo = positivo / (positivo + neutro + negativo)
-        proporcao_neutro = neutro / (positivo + neutro + negativo)
-        proporcao_negativo = negativo / (positivo + neutro + negativo)
+        media_referencias = float(total_referencias)/self.bd.conta_noticias(id_perfil, corpus)
 
+        if positivo + neutro + negativo == 0:
+           total_polaridade = 1
+        else:
+           total_polaridade = positivo + neutro + negativo
+
+        proporcao_positivo = positivo / total_polaridade
+        proporcao_neutro = neutro / total_polaridade
+        proporcao_negativo = negativo / total_polaridade
+        print ([media_referencias, media_palavras, proporcao_positivo, proporcao_neutro, proporcao_negativo])
         return np.array([media_referencias, media_palavras, proporcao_positivo, proporcao_neutro, proporcao_negativo])
 
     def mapeia_posicao(self, i, j, range):
@@ -64,11 +73,9 @@ class ExtratorMetricas():
             lista_metricas.append(self.contabiliza_metricas(id_entidade, id_perfil,corpus))
             lista_perfis.append(id_perfil)
 
-        matriz_metricas = normalize(np.array(lista_metricas))
+        matriz_metricas = scale(np.array(lista_metricas))
         vetor_distancias = pdist(matriz_metricas, 'euclidean')
         qtd_perfis = len(lista_perfis)
-
-        print (lista_metricas)
 
         for i in range(0,qtd_perfis):
             for j in range(i + 1,qtd_perfis):
