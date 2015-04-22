@@ -1,7 +1,12 @@
+import sys
+import os
 from nltk.tokenize import RegexpTokenizer
 import numpy as np
-from scipy.spatial.distance import pdist, euclidean
-from sklearn.preprocessing import normalize, scale
+from scipy.spatial.distance import pdist
+from sklearn.preprocessing import scale
+from sklearn.decomposition import PCA
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 
 class ExtratorMetricas():
 
@@ -63,6 +68,24 @@ class ExtratorMetricas():
 
         return j - 1 + deslcocamento(i, range)
 
+    def gera_pca(self, matriz_metricas, lista_perfis, id_entidade):
+
+        pca = PCA(n_components=2)
+
+        X = pca.fit(matriz_metricas).transform(matriz_metricas)
+        y = np.array(lista_perfis)
+
+        target_names = np.array(['Estadao','G1','Folha','Carta Capital','VEJA'])
+        colors = cm.rainbow(np.linspace(0, 1, 5))
+
+        plt.figure()
+        for c, i, target_name in zip(colors, [1, 2, 3, 4, 5], target_names):
+            plt.scatter(X[y == i, 0], X[y == i, 1], c=c, label=target_name)
+        plt.legend()
+        plt.title(id_entidade)
+
+        plt.show()
+
     def calcula_distancia_total(self, id_entidade, corpus):
 
         lista_metricas = list()
@@ -75,6 +98,7 @@ class ExtratorMetricas():
 
         matriz_metricas = scale(np.array(lista_metricas))
         vetor_distancias = pdist(matriz_metricas, 'euclidean')
+        # self.gera_pca(matriz_metricas, lista_perfis, id_entidade)
         qtd_perfis = len(lista_perfis)
 
         for i in range(0,qtd_perfis):
