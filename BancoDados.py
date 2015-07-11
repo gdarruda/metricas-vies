@@ -1,9 +1,9 @@
-import pymysql
+import mysql.connector
 
 class BancoMySQL():
 
     def __init__(self, usuario, senha, host, banco):
-        self.conexao = pymysql.connect(host=host, unix_socket='/tmp/mysql.sock', user=usuario, passwd=senha, db=banco)
+        self.conexao = mysql.connector.connect(user=usuario, password=senha, host='127.0.0.1', database=banco, buffered=True)
 
     def seleciona_noticias(self, id_entidade, id_perfil):
 
@@ -43,7 +43,7 @@ class BancoMySQL():
 
         count_noticia = self.conexao.cursor()
 
-        query_perfil = 'select count(*) from noticias where id_perfil = %s'
+        query_perfil = 'select count(*) from noticias n join noticias_x_paragrafo np on n.id_noticia = np.id_noticia where id_perfil = %s'
 
         if corpus:
             query_perfil = query_perfil + ' and ind_corpus = \'S\''
