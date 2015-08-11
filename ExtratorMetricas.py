@@ -1,9 +1,9 @@
 from nltk.tokenize import RegexpTokenizer
+from math import fabs, floor
 import numpy as np
 from scipy.spatial.distance import pdist
 from sklearn.preprocessing import scale
 from sklearn.decomposition import PCA
-from sklearn import cross_validation
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
@@ -12,6 +12,25 @@ class ExtratorMetricas():
 
     def __init__(self, bd):
         self.bd = bd
+
+    def desvio_padrao_media(self, valores):
+
+        valores_np = np.array(valores)
+        return (np.std(valores_np), np.mean(valores_np))
+
+    def desvio_absoluto_mediana(self, valores):
+
+        B = 1.4826
+        tamanho = len(valores)
+        posic_mediana = int(floor(tamanho/2))
+
+        valores.sort()
+        mediana_valores = []
+        for valor in valores:
+            mediana_valores.append(fabs(valor - valores[posic_mediana]))
+
+        mediana_valores.sort()
+        return (B * mediana_valores[posic_mediana], valores[posic_mediana])
 
     def contabiliza_metricas(self, id_entidade, id_perfil, corpus):
 
@@ -56,7 +75,7 @@ class ExtratorMetricas():
         proporcao_positivo = positivo / total_polaridade
         proporcao_neutro = neutro / total_polaridade
         proporcao_negativo = negativo / total_polaridade
-        # print ([media_referencias, media_palavras, proporcao_positivo, proporcao_neutro, proporcao_negativo])
+
         return np.array([media_referencias, media_palavras, proporcao_positivo, proporcao_neutro, proporcao_negativo])
 
     def mapeia_posicao(self, i, j, range):
