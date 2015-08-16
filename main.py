@@ -22,4 +22,6 @@ def imprime_metricas(id_entidade):
 # imprime_metricas(4031)  # Dilma
 # imprime_metricas(4039)  # Marina
 
-GL.gera_vies_selecao()
+# GL.gera_vies_tabela('SELECAO')
+GL.gera_desvio('SELECAO', 'MEDIA')
+GL.gera_desvio('SELECAO', 'MEDIANA')
