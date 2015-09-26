@@ -15,6 +15,7 @@ def imprime_metricas(id_entidade):
     for id_perfil in range (1,5):
         print(id_perfil, id_entidade, EM.contabiliza_metricas(id_entidade, id_perfil, True))
 
+
 # imprime_metricas(4074)  # Alckmin
 # imprime_metricas(4078)  # Padilha
 # imprime_metricas(4075)  # Skaf
@@ -22,6 +23,7 @@ def imprime_metricas(id_entidade):
 # imprime_metricas(4031)  # Dilma
 # imprime_metricas(4039)  # Marina
 
-# GL.gera_vies_tabela('SELECAO')
-GL.gera_desvio('SELECAO', 'MEDIA')
-GL.gera_desvio('SELECAO', 'MEDIANA')
+# GL.gera_vies_tabela('POLARIDADE_NEGATIVA')
+# GL.gera_desvio('SELECAO', 'MEDIA')
+# GL.gera_desvio('POLARIDADE_NEGATIVA', 'MEDIANA')
+# GL.gera_correlacao_vies()

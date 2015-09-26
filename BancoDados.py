@@ -39,6 +39,24 @@ class BancoMySQL():
 
         return cursor_perfil
 
+    def existe_entidade_tweet(self, id_entidade, id_noticia):
+
+        count_noticia = self.conexao.cursor()
+
+        query_entidade_tweet = '''select count(*) 
+                                  from noticias n
+                                  join entidades_x_noticias exn
+                                  on   exn.id_noticia = n.id_noticia
+                                  join entidades e
+                                  on   e.id_entidade = exn.id_entidade
+                                  and  e.id_entidade_pai =  %s
+                                  where n.id_noticia = %s'''
+
+        dados_entidade_tweet = (id_entidade, id_noticia)
+        count_noticia.execute(query_entidade_tweet, dados_entidade_tweet)
+
+        return count_noticia.fetchone()[0]
+
     def conta_noticias(self, id_perfil, corpus):
 
         count_noticia = self.conexao.cursor()

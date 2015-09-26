@@ -35,6 +35,7 @@ class ExtratorMetricas():
     def contabiliza_metricas(self, id_entidade, id_perfil, corpus):
 
         total_referencias = 0
+        total_referencias_tweet = 0
         total_palavras = 0
         positivo = 0.
         neutro = 0.
@@ -60,12 +61,16 @@ class ExtratorMetricas():
                 elif polaridade == 'NG':
                     negativo += 1
 
+                total_referencias_tweet += self.bd.existe_entidade_tweet(id_entidade, id_noticia)
+
         if total_referencias == 0:
             media_palavras = 0
         else:
             media_palavras = float(total_palavras)/float(total_referencias)
 
-        media_referencias = float(total_referencias)/self.bd.conta_noticias(id_perfil, corpus)
+        total_noticias_perfil = self.bd.conta_noticias(id_perfil, corpus)
+        media_referencias = float(total_referencias)/total_noticias_perfil
+        media_referencias_tweet = float(total_referencias_tweet)/total_noticias_perfil
 
         if positivo + neutro + negativo == 0:
             total_polaridade = 1
@@ -76,7 +81,7 @@ class ExtratorMetricas():
         proporcao_neutro = neutro / total_polaridade
         proporcao_negativo = negativo / total_polaridade
 
-        return np.array([media_referencias, media_palavras, proporcao_positivo, proporcao_neutro, proporcao_negativo])
+        return np.array([media_referencias, media_palavras, proporcao_positivo, proporcao_neutro, proporcao_negativo, media_referencias_tweet])
 
     def mapeia_posicao(self, i, j, range):
         def deslcocamento(i, range):
