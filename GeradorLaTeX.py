@@ -1,6 +1,8 @@
 #coding: utf-8
 from scipy.stats.stats import pearsonr
+from scipy.linalg import pinv
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 from ExtratorMetricas import ExtratorMetricas
@@ -37,12 +39,21 @@ class GeradorLaTeX():
 
         return case[tipo_desvio]
 
+    def calcula_malahonibis(self):
+
+        print ('entidade, perfil, positivo, neutro, negativo')
+
+        for id_perfil in range(1, 6):
+            for id_entidade in self.entidades_ordenadas:
+                metricas = self.EM.contabiliza_metricas(id_entidade, id_perfil, True)
+                print self.entidades[id_entidade] + ',' + self.perfis[id_perfil] + ',' + str(metricas[2]) + ',' + str(metricas[3]) + ',' + str(metricas[4])
+
     def gera_correlacao_vies(self):
 
         vieses = {}
         correlacao_vieses = {}
 
-        for id_perfil in range(1, 5):
+        for id_perfil in range(1, 6):
             for id_entidade in self.entidades_ordenadas:
 
                 metricas = self.EM.contabiliza_metricas(id_entidade, id_perfil, True)
@@ -86,6 +97,32 @@ class GeradorLaTeX():
                     linha = linha + " & " + str(round(metrica_calculada, 2))
 
             print(linha + " \\\\")
+
+    def calcula_malahanobis(self):
+
+        self.gera_header()
+
+        np.set_printoptions(precision=30)
+
+        mapa_desvio = {}
+        mapa_metrica = {}
+
+        for id_entidade in self.entidades_ordenadas:
+
+            mapa_metrica[id_entidade] = {}
+
+            for id_perfil, nome_perfil in self.perfis.iteritems():
+                metricas = self.EM.contabiliza_metricas(id_entidade, id_perfil, True)[2:5]
+                mapa_metrica[id_entidade][id_perfil] = metricas
+
+            valores_entidade = np.array(mapa_metrica[id_entidade].values())
+            matriz_convariancia = np.cov(valores_entidade)
+            matriz_convariancia_inversa = pinv(matriz_convariancia)
+            media = np.mean(valores_entidade)
+
+
+            print media
+            print valores_entidade 
 
     def gera_desvio(self, metrica, tipo_desvio):
 

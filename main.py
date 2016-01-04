@@ -12,7 +12,7 @@ def calcula_metricas(id_entidade):
     # EM.calcula_distancia_total(id_entidade, True)
 
 def imprime_metricas(id_entidade):
-    for id_perfil in range (1,5):
+    for id_perfil in range (1,6):
         print(id_perfil, id_entidade, EM.contabiliza_metricas(id_entidade, id_perfil, True))
 
 
@@ -23,7 +23,7 @@ def imprime_metricas(id_entidade):
 # imprime_metricas(4031)  # Dilma
 # imprime_metricas(4039)  # Marina
 
-# GL.gera_vies_tabela('POLARIDADE_NEGATIVA')
-# GL.gera_desvio('SELECAO', 'MEDIA')
+# GL.gera_vies_tabela('POLARIDADE_POSITIVA')
+GL.gera_desvio('SELECAO', 'MEDIANA')
 # GL.gera_desvio('POLARIDADE_NEGATIVA', 'MEDIANA')
-# GL.gera_correlacao_vies()
+# GL.calcula_malahanobis()
