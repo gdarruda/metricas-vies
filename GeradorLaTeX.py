@@ -7,6 +7,7 @@ import numpy as np
 
 from ExtratorMetricas import ExtratorMetricas
 
+
 class GeradorLaTeX():
 
     def __init__(self, EM):
@@ -41,7 +42,7 @@ class GeradorLaTeX():
 
     def calcula_malahonibis(self):
 
-        print ('entidade, perfil, positivo, neutro, negativo')
+        print('entidade, perfil, positivo, neutro, negativo')
 
         for id_perfil in range(1, 6):
             for id_entidade in self.entidades_ordenadas:
@@ -120,9 +121,8 @@ class GeradorLaTeX():
             matriz_convariancia_inversa = pinv(matriz_convariancia)
             media = np.mean(valores_entidade)
 
-
             print media
-            print valores_entidade 
+            print valores_entidade
 
     def gera_desvio(self, metrica, tipo_desvio):
 
@@ -142,7 +142,6 @@ class GeradorLaTeX():
                 mapa_metrica[id_entidade][id_perfil] = percentual
 
             valores_entidade = mapa_metrica[id_entidade].values()
-            mapa_desvio[id_entidade] = self.EM.desvio_padrao_media(valores_entidade)
             mapa_desvio[id_entidade] = getattr(self.EM, tipo_desvio)(valores_entidade)
 
         for id_perfil, nome_perfil in self.perfis.iteritems():
@@ -151,7 +150,11 @@ class GeradorLaTeX():
 
             for id_entidade in self.entidades_ordenadas:
                 dam, m = mapa_desvio[id_entidade]
-                qtd_desvio = (mapa_metrica[id_entidade][id_perfil] - m) / dam
-                linha = linha + " & " + str(round(qtd_desvio, 2)).replace('.', ',')
+
+                if (dam != 0):
+                    qtd_desvio = (mapa_metrica[id_entidade][id_perfil] - m) / dam
+                    linha = linha + " & " + str(round(qtd_desvio, 2)).replace('.', ',')
+                else:
+                    linha = linha + " & " + "n/a"
 
             print linha + " \\\\"

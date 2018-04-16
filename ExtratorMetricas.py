@@ -14,7 +14,6 @@ class ExtratorMetricas():
         self.bd = bd
 
     def desvio_padrao_media(self, valores):
-
         valores_np = np.array(valores)
         return (np.std(valores_np), np.mean(valores_np))
 
@@ -22,7 +21,7 @@ class ExtratorMetricas():
 
         B = 1.4826
         tamanho = len(valores)
-        posic_mediana = int(floor(tamanho/2))
+        posic_mediana = int(floor(tamanho / 2))
 
         valores.sort()
         mediana_valores = []
@@ -66,11 +65,11 @@ class ExtratorMetricas():
         if total_referencias == 0:
             media_palavras = 0
         else:
-            media_palavras = float(total_palavras)/float(total_referencias)
+            media_palavras = float(total_palavras) / float(total_referencias)
 
         total_noticias_perfil = self.bd.conta_noticias(id_perfil, corpus)
-        media_referencias = float(total_referencias)/total_noticias_perfil
-        media_referencias_tweet = float(total_referencias_tweet)/total_noticias_perfil
+        media_referencias = float(total_referencias) / total_noticias_perfil
+        media_referencias_tweet = float(total_referencias_tweet) / total_noticias_perfil
 
         if positivo + neutro + negativo == 0:
             total_polaridade = 1
@@ -130,4 +129,4 @@ class ExtratorMetricas():
                 distancia = vetor_distancias[posic]
                 id_perfil_1 = lista_perfis[i]
                 id_perfil_2 = lista_perfis[j]
-                print (id_perfil_1, id_perfil_2, distancia)
+                print(id_perfil_1, id_perfil_2, distancia)
